@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- Menu principale-->
+  <menuitem id="menu_principale" name="Controle de gestion" web_icon="private_control_budget,static/description/icon.png" sequence="10"/>
+
+  <menuitem id="account_budget.menu_act_crossovered_budget_view" parent="private_control_budget.menu_principale" name="Budgets" action="account_budget.act_crossovered_budget_view" groups="account.group_account_user" sequence="1"/>
+
+  <menuitem id="menu_poste_budgetaire" name="Postes budgétaires" parent="private_control_budget.menu_principale" action="account_budget.open_budget_post_form" sequence="2"/>
+
+  <menuitem id="menu_compte_ana"  name="Comptes analytiques"  parent="private_control_budget.menu_principale"  action="analytic.action_analytic_account_form" sequence="3" groups="analytic.group_analytic_accounting"/>
+
+  <menuitem id="menu_ecriture_ana" name="Ecritures analytiques" parent="private_control_budget.menu_principale"  action="analytic.account_analytic_line_action_entries" sequence="4" groups="analytic.group_analytic_accounting"/>
+
+</odoo>

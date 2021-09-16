@@ -1,0 +1,15 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="view_account_analytic_account_form_inherit_budget_inherit">
+      <field name="name">account.analytic.account.form.inherit.budget.inherit</field>
+      <field name="model">account.analytic.account</field>
+      <field name="inherit_id" ref="account_budget.view_account_analytic_account_form_inherit_budget"/>
+      <field name="arch" type="xml">
+        <xpath expr="//notebook/page/field/tree/field[@name='practical_amount']" position="after">
+          <field name="engage_amount" sum="Montant Engage" widget="monetary"/>
+          <field name="available_amount" sum="Montant Disponible" widget="monetary"/>
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>

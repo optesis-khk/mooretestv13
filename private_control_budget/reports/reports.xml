@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="action_report_crossovered_budget_xlsx" model="ir.actions.report">
+        <field name="name">Crossovered Budget XLSX</field>
+        <field name="model">report_crossovered_budget</field>
+        <field name="type">ir.actions.report</field>
+        <field name="report_name">c_b.report_crossovered_budget_xlsx</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_file">report_crossovered_budget</field>
+    </record>
+</odoo>

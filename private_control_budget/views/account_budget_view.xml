@@ -1,0 +1,191 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="crossovered_budget_view_form_inherit">
+      <field name="name">crossovered.budget.view.form.inherit</field>
+      <field name="model">crossovered.budget</field>
+      <field name="inherit_id" ref="account_budget.crossovered_budget_view_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//form/header/button" position="after">
+          <button string="Suivi Budgetaire" type="object" name="button_export_xlsx" class="oe_highlight"/>
+        </xpath>
+        <xpath expr="//form/sheet/notebook/page/field/tree/field[@name='practical_amount']" position="after">
+          <field name="engage_amount" sum="Montant Engage" widget="monetary"/>
+          <field name="available_amount" sum="Montant Disponible" widget="monetary"/>
+        </xpath>
+      </field>
+    </record>
+
+    <record id="view_account_budget_line_tree" model="ir.ui.view">
+      <field name="name">account.budget.line.tree</field>
+      <field name="model">account.budget.line</field>
+      <field name="arch" type="xml">
+        <tree string="Ecritures Budgetaires">
+          <field name="date"/>
+          <field name="ref" invisible="context.get('to_invoice', False)"/>
+          <field name="name"/>
+          <field name="general_budget_id"/>
+          <field name="general_account_id"/>
+          <field name="account_id"/>
+          <field name="company_id" groups="base.group_multi_company"/>
+          <field name="unit_amount" sum="Quantity"/>
+          <field name="planned_amount"/>
+          <field name="amount" sum="Total"/>
+          <field name="available_amount"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="account_budget_line_action">
+      <field name="context">{'search_default_group_date': 1, 'search_default_group_journal': 1, 'default_account_id': active_id}</field>
+      <field name="domain">[('account_id','=', active_id)]</field>
+      <field name="name">Costs &amp; Revenues</field>
+      <field name="res_model">account.budget.line</field>
+      <field name="view_mode">tree,form,graph,pivot</field>
+      <field name="view_id" ref="view_account_budget_line_tree"/>
+   
+      <field name="help" type="html">
+        <p>
+          No activity yet on this account.
+        </p><p>
+        In Odoo, sale orders and projects are implemented using
+        analytic accounts. You can track costs and revenues to analyse
+        your margins easily.
+      </p><p>
+      Costs will be created automatically when you register supplier
+      invoices, expenses or timesheets.
+    </p><p>
+    Revenues will be created automatically when you create customer
+    invoices. Customer invoices can be created based on sale orders
+    (fixed price invoices), on timesheets (based on the work done) or
+    on expenses (e.g. reinvoicing of travel costs).
+  </p>
+</field>
+</record>
+
+<record id="view_account_budget_line_form" model="ir.ui.view">
+  <field name="name">account.budget.line.form</field>
+  <field name="model">account.budget.line</field>
+  <field name="priority">1</field>
+  <field name="arch" type="xml">
+    <form string="Ecritures Budgetaires">
+      <sheet string="Ecriture Budgetaire">
+        <group>
+          <group>
+            <field name="name"/>
+            <field name="account_id"/>
+            <field name="general_budget_id"/>
+            <field name="ref"/>
+            <field name="partner_id"/>
+            <field name="date"/>
+            <field name="company_id" groups="base.group_multi_company"/>
+          </group>
+          <group string="Montant">
+            <field name="planned_amount"/>
+            <field name="amount"/>
+            <field name="general_account_id"/>
+            <field name="available_amount"/>
+            <field name="product_id"/>
+            <field name="unit_amount"/>
+          </group>
+        </group>
+      </sheet>
+    </form>
+  </field>
+</record>
+
+<record id="view_account_budget_line_filter" model="ir.ui.view">
+  <field name="name">account.budget.line.select</field>
+  <field name="model">account.budget.line</field>
+  <field name="arch" type="xml">
+    <search string="Search Account Budget Lines">
+      <field name="name"/>
+      <field name="date"/>
+      <field name="product_id"/>
+      <field name="partner_id" filter_domain="[('partner_id','child_of',self)]"/>
+      <field name="account_id"/>
+      <group string="Group By..." expand="0" name="groupby">
+        <filter string="Financial Account" name="Financial Account" context="{'group_by':'general_account_id'}"/>
+        <filter string="Product" name="Product" context="{'group_by':'product_id'}"/>
+        <filter string="Partner" name="Partner" context="{'group_by':'partner_id'}"/>
+        <filter string="Analytic Account"  context="{'group_by':'account_id'}" name="account_id"/>
+        <filter string="Tasks Month"  context="{'group_by':'date'}" name="group_date"/>
+        <filter string="Poste budgétaire"  context="{'group_by':'general_budget_id'}" name="general_budget_id"/>
+      </group>
+    </search>
+  </field>
+</record>
+
+<record id="view_account_budget_line_graph" model="ir.ui.view">
+  <field name="name">account.budget.line.graph</field>
+  <field name="model">account.budget.line</field>
+  <field name="arch" type="xml">
+    <graph string="Ecritures Budgetaires">
+      <field name="account_id" type="row"/>
+      <field name="unit_amount" type="measure"/>
+      <field name="amount" type="measure"/>
+    </graph>
+  </field>
+</record>
+<record id="view_account_budget_line_pivot" model="ir.ui.view">
+  <field name="name">account.budget.line.pivot</field>
+  <field name="model">account.budget.line</field>
+  <field name="arch" type="xml">
+    <pivot string="Ecritures Budgetaires" >
+      <field name="account_id" type="row"/>
+      <field name="partner_id" type="row"/>
+      <field name="unit_amount" type="measure"/>
+      <field name="planned_amount" type="measure"/>
+      <field name="amount" type="measure"/>
+      <field name="available_amount" type="measure"/>
+    </pivot>
+  </field>
+</record>
+
+<record model="ir.actions.act_window" id="account_budget_line_action_entries">
+  <field name="name">Ecritures Budgetaires</field>
+  <field name="res_model">account.budget.line</field>
+  <field name="view_mode">tree,form,graph,pivot</field>
+  <field name="view_id" ref="view_account_budget_line_tree"/>
+ 
+
+  <field name="search_view_id" ref="private_control_budget.view_account_budget_line_filter"/>
+  <field name="help" type="html">
+    <p>
+      No activity yet.
+    </p><p>
+    In Odoo, sale orders and projects are implemented using
+    analytic accounts. You can track costs and revenues to analyse
+    your margins easily.
+  </p><p>
+  Costs will be created automatically when you register supplier
+  invoices, expenses or timesheets.
+</p><p>
+Revenues will be created automatically when you create customer
+invoices. Customer invoices can be created based on sale orders
+(fixed price invoices), on timesheets (based on the work done) or
+on expenses (e.g. reinvoicing of travel costs).
+</p>
+</field>
+</record>
+
+<record model="ir.ui.view" id="view_crossovered_budget_line_pivot_inherit">
+      <field name="name">crossovered.budget.line.pivot.inherit</field>
+      <field name="model">crossovered.budget.lines</field>
+      <field name="inherit_id" ref="account_budget.view_crossovered_budget_line_pivot"/>
+      <field name="arch" type="xml">
+        <field name="practical_amount" position="after">
+          <field name="engage_amount" type="measure" string="Montant engagé"/>
+          <field name="available_amount" type="measure" string="Montant disponible"/>
+        </field>
+      </field>
+    </record>
+
+<menuitem
+  name="Ecriture budgetaire"
+  parent="private_control_budget.menu_principale"
+  action="account_budget_line_action_entries"
+  id="menu_action_budget_lines_reporting"
+  sequence="35"/>
+
+</data>
+</odoo>
